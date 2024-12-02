@@ -5,7 +5,7 @@ authors = ["Erkko Ihalainen"]
 edition = "2021"
 
 [lib]
-bench = true
+bench = false
 
 [dependencies]
 aoc-runner = "*"
