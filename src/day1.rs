@@ -1,21 +1,18 @@
+use std::collections::BinaryHeap;
 use std::collections::HashMap;
-use std::iter::zip;
 
 #[aoc(day1, part1)]
 pub fn part1(input: &str) -> u32 {
-    let (mut left, mut right): (Vec<_>, Vec<_>) = input
+    let (left, right): (BinaryHeap<_>, BinaryHeap<_>) = input
         .lines()
-        .map(|s| s.split_once("   ").expect("Should give two parts"))
-        .map(|(l, r)| {
-            (
-                l.parse::<u32>().expect("Should parse"),
-                r.parse::<u32>().expect("Should parse"),
-            )
-        })
+        .map(|s| s.split_once("   ").unwrap())
+        .map(|(l, r)| (l.parse::<u32>().unwrap(), r.parse::<u32>().unwrap()))
         .unzip();
-    left.sort();
-    right.sort();
-    zip(left, right).map(|(l, r)| l.abs_diff(r)).sum()
+    left.into_sorted_vec()
+        .iter()
+        .zip(right.into_sorted_vec())
+        .map(|(l, r)| l.abs_diff(r))
+        .sum()
 }
 
 #[aoc(day1, part2)]
