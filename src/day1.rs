@@ -1,18 +1,15 @@
-use std::collections::BinaryHeap;
 use std::collections::HashMap;
 
 #[aoc(day1, part1)]
 pub fn part1(input: &str) -> u32 {
-    let (left, right): (BinaryHeap<_>, BinaryHeap<_>) = input
+    let (mut left, mut right): (Vec<_>, Vec<_>) = input
         .lines()
         .map(|s| s.split_once("   ").unwrap())
         .map(|(l, r)| (l.parse::<u32>().unwrap(), r.parse::<u32>().unwrap()))
         .unzip();
-    left.into_sorted_vec()
-        .iter()
-        .zip(right.into_sorted_vec())
-        .map(|(l, r)| l.abs_diff(r))
-        .sum()
+    left.sort_unstable();
+    right.sort_unstable();
+    left.iter().zip(right).map(|(l, r)| l.abs_diff(r)).sum()
 }
 
 #[aoc(day1, part2)]
@@ -20,13 +17,8 @@ pub fn part2(input: &str) -> u32 {
     let mut right_counts = HashMap::new();
     input
         .lines()
-        .flat_map(|s| s.split_once("   "))
-        .map(|(l, r)| {
-            (
-                l.parse::<u32>().expect("Should parse"),
-                r.parse::<u32>().expect("Should parse"),
-            )
-        })
+        .map(|s| s.split_once("   ").unwrap())
+        .map(|(l, r)| (l.parse::<u32>().unwrap(), r.parse::<u32>().unwrap()))
         .map(|(l, r)| {
             right_counts
                 .entry(r)
